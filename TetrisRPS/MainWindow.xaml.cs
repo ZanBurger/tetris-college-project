@@ -23,6 +23,7 @@ namespace TetrisRPS
         public MainWindow()
         {
             InitializeComponent();
+            //this is comment
         }
     }
 }
