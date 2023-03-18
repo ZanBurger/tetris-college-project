@@ -33,7 +33,7 @@
             <!--Add the Function for loading the game into the Loaded argument-->
             <!--The loading argument goes inside the Canvas-->
             <!--Loaded="Function Name For Loading"-->
-            <Canvas x:Name="GameCanvas"
+            <Canvas x:Name="gameCanvas"
                 Grid.Row="1"
                 Grid.Column="1"
                 Width="250"
@@ -41,6 +41,56 @@
                 ClipToBounds="True"
                 Background="#101010"/>
         </Viewbox>
+
+        <TextBlock x:Name="ScoreText"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   Text="Score: 0"
+                   TextAlignment="Center"
+                   Margin ="0, 10"/>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+            <TextBlock Text="Hold" TextAlignment="Center"/>
+
+            <Image x:Name="holdImage" Margin="20" Width="120"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left">
+            <TextBlock Text="Upcoming" TextAlignment="Center"/>
+
+            <Image x:Name="nextImage" Margin="20" Width="120"/>
+        </StackPanel>
+
+        <!--This is the overlay for when the game is over-->
+        <!--Change the visibility to "Visible" once the game is over-->
+        <Grid x:Name="gameOverScreen"
+              Background="#CC000000"
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="3" Visibility="Hidden">
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                
+                <!--This is the winning players textBlock change it based on the winner-->
+                <TextBlock x:Name="playerWinText" FontSize="48" TextAlignment="Center"/>
+                
+                <!--This is the score display change it based on the winning players score-->
+                <TextBlock x:Name="playerFinalScore" Text="Score: " FontSize="38" TextAlignment="Center"/>
+
+                <!--Play again button-->
+                <!--You can add the Click event/argument to reset the game-->
+                <Button Content="Play Again"
+                    Background="LightCyan"
+                    Margin="0, 20, 0, 0"
+                    Padding="5"
+                    />
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Window>
