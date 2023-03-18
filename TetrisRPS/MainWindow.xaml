@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TetrisRPS"
         mc:Ignorable="d"
-        Title="Dual-Tetris" Height="600" Width="800" 
+        Title="Dual-Tetris" Height="600" Width="850" 
         MinWidth="600" MinHeight="600"
-        Foreground="White" FontFamily="Segoe UI Light" FontSize="25"
+        Foreground="White" FontWeight="Bold" FontFamily="Segoe UI" FontSize="25"
         Icon="assets/icon.png">
     <!--Add the Function for detecing player input-->
     <!--Key down event handler-->
@@ -21,25 +21,28 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.Background>
             <ImageBrush ImageSource="assets\background.jpg"/>
         </Grid.Background>
-
+    
+        <!--Current players game view-->
         <Viewbox Grid.Row="1" Grid.Column="1" Margin="0,15,0,15">
 
             <!--Add the Function for loading the game into the Loaded argument-->
             <!--The loading argument goes inside the Canvas-->
             <!--Loaded="Function Name For Loading"-->
-            <Canvas x:Name="gameCanvas"
+            <Canvas x:Name="firstCanvas"
                 Grid.Row="1"
                 Grid.Column="1"
                 Width="250"
                 Height="500"
                 ClipToBounds="True"
-                Background="#101010"/>
+                Background="#545454"/>
         </Viewbox>
 
         <TextBlock x:Name="ScoreText"
@@ -49,6 +52,7 @@
                    TextAlignment="Center"
                    Margin ="0, 10"/>
 
+        <!--The block that is currently being held-->
         <StackPanel Grid.Row="1"
                     Grid.Column="0"
                     VerticalAlignment="Center"
@@ -58,14 +62,42 @@
             <Image x:Name="holdImage" Margin="20" Width="120"/>
         </StackPanel>
 
+        <!--The upcoming block-->
         <StackPanel Grid.Row="1"
-                    Grid.Column="2"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Left">
-            <TextBlock Text="Upcoming" TextAlignment="Center"/>
+                    Grid.Column="0"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right">
+            <TextBlock Text="Upcoming" TextAlignment="Center" Margin="0,15,0,0"/>
 
             <Image x:Name="nextImage" Margin="20" Width="120"/>
         </StackPanel>
+
+        <!--The game view of the opposing player-->
+        <Viewbox Grid.Row="1" Grid.Column="3" Margin="0,15,0,15">
+
+            <!--Add the Function for loading the game into the Loaded argument-->
+            <!--The loading argument goes inside the Canvas-->
+            <!--Loaded="Function Name For Loading"-->
+            <Canvas x:Name="secondCanvas"
+                Grid.Row="1"
+                Grid.Column="1"
+                Width="250"
+                Height="500"
+                ClipToBounds="True"
+                Background="#545454"/>
+        </Viewbox>
+
+        <!--The opponet of the player-->
+        <!--Dynamically change the text to either player 1 or 2-->
+        <TextBlock x:Name="againstPlayer"
+                   Grid.Row="0"
+                   Grid.Column="3"
+                   Text="Player 1"
+                   TextAlignment="Center"
+                   Margin ="0, 10"/>
+
+        <!--Text in the middle "VS"-->
+        <TextBlock Grid.Row="1" Grid.Column="2" TextAlignment="Center" VerticalAlignment="Center" Text="VS"/>
 
         <!--This is the overlay for when the game is over-->
         <!--Change the visibility to "Visible" once the game is over-->
