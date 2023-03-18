@@ -8,7 +8,7 @@
         Title="Dual-Tetris" Height="600" Width="850" 
         MinWidth="600" MinHeight="600"
         Foreground="White" FontWeight="Bold" FontFamily="Segoe UI" FontSize="25"
-        Icon="assets/icon.png">
+        Icon="assets/icon.png" KeyDown="WindowKeyDown">
     <!--Add the Function for detecing player input-->
     <!--Key down event handler-->
     <!--KeyDown="Name of the function for detection"-->
