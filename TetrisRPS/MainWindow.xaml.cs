@@ -131,30 +131,8 @@ namespace TetrisRPS
             if (gameState.IsGameOver) {
                 return;
             }
-            switch (e.Key) {
-                case Key.Left:
-                    gameState.MoveBlockLeft();
-                    break;
-                case Key.Right:
-                    gameState.MoveBlockRight();
-                    break;
-                case Key.Down:
-                    gameState.MoveBlockDown();
-                    break;
-                case Key.Up:
-                    gameState.RotateBlockCW();
-                    break;
-                case Key.Z:
-                    gameState.RotateBlockCCW();
-                    break;
-                case Key.C:
-                    gameState.HoldBlock();
-                    break;
-                case Key.Space:
-                    gameState.DropBlock();
-                    break;
-                default:
-                    return;
+            gameState.MoveBlock((int)e.Key);
+            Draw(gameState);
             }
             Draw(gameState);
         }
