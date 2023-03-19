@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Design;
 using System.Windows.Ink;
+using System.Windows.Input;
 
 namespace TetrisRPS;
 
@@ -126,4 +127,35 @@ public class GameState {
         CurrentBlock.Move(BlockDropDistance(), 0);
         PlaceBlock();
     }
+
+    public void MoveBlock(int key)
+    {
+        switch (key)
+        {
+            case 18:
+                DropBlock();
+                break;
+            case 23:
+                MoveBlockLeft();
+                break;
+            case 24:
+                RotateBlockCW();
+                break;
+            case 25:
+                MoveBlockRight();
+                break;
+            case 26:
+                MoveBlockDown();
+                break;
+            case 46:
+                HoldBlock();
+                break;
+            case 68:
+                RotateBlockCCW();
+                break;
+            default:
+                return;
+        }
+    }
+
 }
