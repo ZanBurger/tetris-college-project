@@ -147,6 +147,7 @@
                     Background="LightCyan"
                     Margin="0, 20, 0, 0"
                     Padding="5"
+                    Click="End_Click"
                     />
             </StackPanel>
         </Grid>

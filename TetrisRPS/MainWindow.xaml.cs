@@ -134,7 +134,12 @@ namespace TetrisRPS
             gameState.MoveBlock((int)e.Key);
             Draw(gameState);
             }
-            Draw(gameState);
+
+        private async void End_Click(object sender, RoutedEventArgs e)
+        {
+            gameOverScreen.Visibility = Visibility.Hidden;
+            gameState = new GameState();
+            timer.Start();
         }
 
         // Draw the the game grid on the canvas
