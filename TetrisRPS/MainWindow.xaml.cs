@@ -54,11 +54,29 @@ namespace TetrisRPS
 
         private GameState gameState = new GameState();
         
+        DispatcherTimer timer = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
             imageControls = SetupGameCanvas(gameState.GameGrid);
-            GameLoop();
+            timer.Tick += Game_Tick;
+            timer.Interval = TimeSpan.FromMilliseconds(500);
+        }
+
+        private void Game_Tick(object? sender, EventArgs e)
+        {
+            if (!gameState.IsGameOver)
+            {
+                gameState.MoveBlockDown();
+                Draw(gameState);
+            }
+            else
+            {
+                gameOverScreen.Visibility = Visibility.Visible;
+                playerWinText.Text = "Game Over";
+                timer.Stop();
+            }
         }
 
         private Image[,] SetupGameCanvas(GameGrid grid) 
@@ -114,16 +132,7 @@ namespace TetrisRPS
         }
 
         // Gameloop that draws the game state.
-        private async Task GameLoop() {
-            Draw(gameState);
-            while (!gameState.IsGameOver) {
-                await Task.Delay(500);
-                gameState.MoveBlockDown();
-                Draw(gameState);
-            }
-            gameOverScreen.Visibility = Visibility.Visible;
-            playerWinText.Text = "Game Over";           
-        }
+     
         // Detecting player input
         // Function is called inside the Window
         private void WindowKeyDown(object sender, KeyEventArgs e)
