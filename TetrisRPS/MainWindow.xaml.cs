@@ -51,26 +51,29 @@ namespace TetrisRPS
         };
 
         // For each of the game grid cells there is and image control
-        private readonly Image[,] imageControls;
+        private readonly Image[,] firstImageControls;
+        private readonly Image[,] secondImageControls;
 
-        private GameState gameState = new GameState();
+        private GameState firstGameState = new GameState();
+        private GameState secondGameState = new GameState();
 
         DispatcherTimer timer = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
-            imageControls = SetupGameCanvas(gameState.GameGrid);
+            firstImageControls = SetupGameCanvas(firstGameState.GameGrid, firstCanvas);
+            secondImageControls = SetupGameCanvas(secondGameState.GameGrid, secondCanvas);
             timer.Tick += Game_Tick;
             timer.Interval = TimeSpan.FromMilliseconds(500);
         }
 
         private void Game_Tick(object? sender, EventArgs e)
         {
-            if (!gameState.IsGameOver)
+            if (!firstGameState.IsGameOver && !secondGameState.IsGameOver)
             {
-                gameState.MoveBlockDown();
-                Draw(gameState);
+                firstGameState.MoveBlockDown();
+                Draw(firstGameState, firstImageControls);
             }
             else
             {
@@ -80,7 +83,7 @@ namespace TetrisRPS
             }
         }
 
-        private Image[,] SetupGameCanvas(GameGrid grid)
+        private Image[,] SetupGameCanvas(GameGrid grid, Canvas canvas)
         {
             Image[,] ImageControls = new Image[grid.Rows, grid.Columns];
             int cellSize = 25;
@@ -96,30 +99,30 @@ namespace TetrisRPS
                     };
                     Canvas.SetTop(imageControl, (r - 2) * cellSize);
                     Canvas.SetLeft(imageControl, c * cellSize);
-                    firstCanvas.Children.Add(imageControl);
+                    canvas.Children.Add(imageControl);
                     ImageControls[r, c] = imageControl;
                 }
             }
             return ImageControls;
         }
 
-        private void DrawGrid(GameGrid grid)
+        private void DrawGrid(GameGrid grid, Image[,] control)
         {
             for (int r = 0; r < grid.Rows; r++)
             {
                 for (int c = 0; c < grid.Columns; c++)
                 {
                     int id = grid[r, c];
-                    imageControls[r, c].Source = tileImages[id];
+                    control[r, c].Source = tileImages[id];
                 }
             }
         }
 
-        private void DrawBlock(Block block)
+        private void DrawBlock(Block block, Image[,] control)
         {
             foreach (Position p in block.TilePositions())
             {
-                imageControls[p.Row, p.Column].Source = tileImages[block.Id];
+                control[p.Row, p.Column].Source = tileImages[block.Id];
             }
         }
 
@@ -135,31 +138,29 @@ namespace TetrisRPS
             }
         }
 
-        private void Draw(GameState gameState)
+        private void Draw(GameState gameState, Image[,] control)
         {
-            DrawGrid(gameState.GameGrid);
-            DrawBlock(gameState.currentBlock);
+            DrawGrid(gameState.GameGrid, control);
+            DrawBlock(gameState.currentBlock, control);
             DrawHeldBlock(gameState.HeldBlock);
         }
-
-        // Gameloop that draws the game state.
 
         // Detecting player input
         // Function is called inside the Window
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (gameState.IsGameOver)
+            if (firstGameState.IsGameOver)
             {
                 return;
             }
-            gameState.MoveBlock((int)e.Key);
-            Draw(gameState);
+            firstGameState.MoveBlock((int)e.Key);
+            Draw(firstGameState, firstImageControls);
         }
 
         private async void End_Click(object sender, RoutedEventArgs e)
         {
             gameOverScreen.Visibility = Visibility.Hidden;
-            gameState = new GameState();
+            firstGameState = new GameState();
             timer.Start();
         }
 
@@ -168,7 +169,7 @@ namespace TetrisRPS
             IPInput.IsEnabled = false;
             StartButton.IsEnabled = false;
             gameOverScreen.Visibility = Visibility.Hidden;
-            gameState = new GameState();
+            firstGameState = new GameState();
             timer.Start();
 
         }
