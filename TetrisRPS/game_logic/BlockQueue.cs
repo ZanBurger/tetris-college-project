@@ -18,13 +18,14 @@ public class BlockQueue
     private readonly Random random = new();
     
     public Block NextBlock { get; private set;}
-    
+    int curBlockID = 0;
     public BlockQueue() {
         NextBlock = RandomBlock();
     }
     private Block RandomBlock() {
-        int index = random.Next(blocks.Length);
-        return blocks[index].GetType().GetConstructor(Type.EmptyTypes).Invoke(null) as Block;
+        curBlockID++;
+        curBlockID %= blocks.Length;
+        return blocks[curBlockID].GetType().GetConstructor(Type.EmptyTypes).Invoke(null) as Block;
     }
     
     public Block GetAndReplaceNextBlock() {
