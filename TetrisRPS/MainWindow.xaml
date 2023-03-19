@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TetrisRPS"
         mc:Ignorable="d"
-        Title="Dual-Tetris" Height="600" Width="850" 
-        MinWidth="600" MinHeight="600"
+        Title="Dual-Tetris" Height="600" Width="900" 
+        MinWidth="900" MinHeight="600"
         Foreground="White" FontWeight="Bold" FontFamily="Segoe UI" FontSize="25"
         Icon="assets/icon.png" KeyDown="WindowKeyDown">
     <!--Add the Function for detecing player input-->
@@ -14,6 +14,7 @@
     <!--KeyDown="Name of the function for detection"-->
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -29,9 +30,32 @@
         <Grid.Background>
             <ImageBrush ImageSource="assets\background.jpg"/>
         </Grid.Background>
-    
+
+        <!--For entering the IP address-->
+        <TextBlock Grid.Row="0" Grid.Column="1"
+                   VerticalAlignment="Top" HorizontalAlignment="Center"
+                   Text="Enter IP address:"
+                   FontSize="20" Margin="0,5,0,50"/>
+        <TextBox Grid.Row="0" Grid.Column="1" 
+                 VerticalAlignment="Center" HorizontalAlignment="Center"
+                 TextWrapping="Wrap" Width="175" Height="25" FontSize="15"
+                 FontWeight="Light" Margin="0,15,0,0"/>
+        <Button Grid.Row="0" Grid.Column="1"
+                VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
+                Content="Connect" Width="75" Height="18" FontWeight="Light" FontSize="10"
+                Click=""/>
+
+        <!--For choosing to either be a host or not-->
+        <TextBlock Grid.Row="0" Grid.Column="3"
+                   VerticalAlignment="Top" HorizontalAlignment="Center"
+                   Margin="0,10,0,0"
+                   Text="Host:" FontWeight="Bold" FontSize="20"/>
+        <CheckBox Grid.Row="0" Grid.Column="3" Margin="0,5,0,0"
+                  VerticalAlignment="Center" HorizontalAlignment="Center"
+                  />
+
         <!--Current players game view-->
-        <Viewbox Grid.Row="1" Grid.Column="1" Margin="0,15,0,15">
+        <Viewbox Grid.Row="2" Grid.Column="1" Margin="0,15,0,15">
 
             <!--Add the Function for loading the game into the Loaded argument-->
             <!--The loading argument goes inside the Canvas-->
@@ -46,14 +70,14 @@
         </Viewbox>
 
         <TextBlock x:Name="ScoreText"
-                   Grid.Row="0"
+                   Grid.Row="1"
                    Grid.Column="1"
                    Text="Score: 0"
                    TextAlignment="Center"
-                   Margin ="0, 10"/>
+                   VerticalAlignment="Center"/>
 
         <!--The block that is currently being held-->
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Right">
@@ -63,7 +87,7 @@
         </StackPanel>
 
         <!--The upcoming block-->
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right">
@@ -73,7 +97,7 @@
         </StackPanel>
 
         <!--The game view of the opposing player-->
-        <Viewbox Grid.Row="1" Grid.Column="3" Margin="0,15,0,15">
+        <Viewbox Grid.Row="2" Grid.Column="3" Margin="0,15,0,15">
 
             <!--Add the Function for loading the game into the Loaded argument-->
             <!--The loading argument goes inside the Canvas-->
@@ -90,21 +114,24 @@
         <!--The opponet of the player-->
         <!--Dynamically change the text to either player 1 or 2-->
         <TextBlock x:Name="againstPlayer"
-                   Grid.Row="0"
+                   Grid.Row="1"
                    Grid.Column="3"
-                   Text="Player 1"
+                   Text="Opponent"
                    TextAlignment="Center"
-                   Margin ="0, 10"/>
+                   VerticalAlignment="Center"/>
 
         <!--Text in the middle "VS"-->
-        <TextBlock Grid.Row="1" Grid.Column="2" TextAlignment="Center" VerticalAlignment="Center" Text="VS"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" TextAlignment="Center" VerticalAlignment="Center" Text="VS"/>
 
+        <StackPanel Grid.Row="1" Grid.Column="4">
+        </StackPanel>
+        
         <!--This is the overlay for when the game is over-->
         <!--Change the visibility to "Visible" once the game is over-->
         <Grid x:Name="gameOverScreen"
               Background="#CC000000"
-              Grid.RowSpan="2"
-              Grid.ColumnSpan="3" Visibility="Hidden">
+              Grid.RowSpan="3"
+              Grid.ColumnSpan="5" Visibility="Hidden">
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 
