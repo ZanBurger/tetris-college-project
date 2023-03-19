@@ -23,7 +23,8 @@ public class BlockQueue
         NextBlock = RandomBlock();
     }
     private Block RandomBlock() {
-        return blocks[random.Next(blocks.Length)];
+        int index = random.Next(blocks.Length);
+        return blocks[index].GetType().GetConstructor(Type.EmptyTypes).Invoke(null) as Block;
     }
     
     public Block GetAndReplaceNextBlock() {

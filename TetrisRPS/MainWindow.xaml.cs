@@ -52,40 +52,118 @@ namespace TetrisRPS
         // For each of the game grid cells there is and image control
         private readonly Image[,] imageControls;
 
-        // TODO - GameState object
+        private GameState gameState = new GameState();
         
-
         public MainWindow()
         {
             InitializeComponent();
-            //this is comment
+            imageControls = SetupGameCanvas(gameState.GameGrid);
+            GameLoop();
         }
 
-        // TODO
-        // Method for setting up the image controls on the canvas
-        // The image controls array should contain 22 rows and 10 collumns (10x22)
-        
-        // TOOD
-        // Drawing the game grid
+        private Image[,] SetupGameCanvas(GameGrid grid) 
+        {
+            Image[,] ImageControls = new Image[grid.Rows, grid.Columns];
+            int cellSize = 25;
 
-        // TODO
-        // Draw the current block
+            for (int r = 0; r < grid.Rows; r++) {
+                for (int c = 0; c < grid.Columns; c++) {
+                    Image imageControl = new Image
+                    {
+                        Width = cellSize,
+                        Height = cellSize
+                    };
+                    Canvas.SetTop(imageControl, (r - 2) * cellSize);
+                    Canvas.SetLeft(imageControl, c * cellSize);
+                    firstCanvas.Children.Add(imageControl);
+                    ImageControls[r, c] = imageControl;
+                }
+            }
+            return ImageControls;
+    }
 
-        // TODO 
-        // Combine the drawing of the game grid with drawing the current block so it is done at the same time
+        private void DrawGrid(GameGrid grid) {
+            for (int r = 0; r < grid.Rows; r++) {
+                for (int c = 0; c < grid.Columns; c++) { 
+                    int id = grid[r, c];
+                    imageControls[r, c].Source = tileImages[id];
+                }
+            }
+        }
 
+        private void DrawBlock(Block block) {
+            foreach (Position p in block.TilePositions()) {
+                imageControls[p.Row, p.Column].Source = tileImages[block.Id];
+            }
+        }
+
+        private void DrawHeldBlock(Block heldBlock) {
+            if (heldBlock == null)
+            {
+                holdImage.Source = blockImages[0];
+            }
+            else {
+                holdImage.Source = blockImages[heldBlock.Id];
+            }
+        }
+
+        private void Draw(GameState gameState) {
+            DrawGrid(gameState.GameGrid);
+            DrawBlock(gameState.currentBlock);
+            DrawHeldBlock(gameState.HeldBlock);
+        }
+
+        // Gameloop that draws the game state.
+        private async Task GameLoop() {
+            Draw(gameState);
+            while (!gameState.IsGameOver) {
+                await Task.Delay(500);
+                gameState.MoveBlockDown();
+                Draw(gameState);
+            }
+            gameOverScreen.Visibility = Visibility.Visible;
+            playerWinText.Text = "Game Over";           
+        }
         // Detecting player input
         // Function is called inside the Window
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
-
+            if (gameState.IsGameOver) {
+                return;
+            }
+            switch (e.Key) {
+                case Key.Left:
+                    gameState.MoveBlockLeft();
+                    break;
+                case Key.Right:
+                    gameState.MoveBlockRight();
+                    break;
+                case Key.Down:
+                    gameState.MoveBlockDown();
+                    break;
+                case Key.Up:
+                    gameState.RotateBlockCW();
+                    break;
+                case Key.Z:
+                    gameState.RotateBlockCCW();
+                    break;
+                case Key.C:
+                    gameState.HoldBlock();
+                    break;
+                case Key.Space:
+                    gameState.DropBlock();
+                    break;
+                default:
+                    return;
+            }
+            Draw(gameState);
         }
 
         // Draw the the game grid on the canvas
         // The function is called inside the canvas using the Loaded function
-        private void GameCanvasLoaded(object sender, RoutedEventArgs e)
+        private async void GameCanvasLoaded(object sender, RoutedEventArgs e)
         {
-
+            await GameLoop();
         }
 
         // Play again button
