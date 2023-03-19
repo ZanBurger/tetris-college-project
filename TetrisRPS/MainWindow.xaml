@@ -36,13 +36,18 @@
                    VerticalAlignment="Top" HorizontalAlignment="Center"
                    Text="Enter IP address:"
                    FontSize="20" Margin="0,5,0,50"/>
+        
         <TextBox Grid.Row="0" Grid.Column="1" 
                  VerticalAlignment="Center" HorizontalAlignment="Center"
                  TextWrapping="Wrap" Width="175" Height="25" FontSize="15"
-                 FontWeight="Light" Margin="0,15,0,0"/>
+                 FontWeight="Light" Margin="0,15,0,0"
+                 Name="IPInput"/>
+        
         <Button Grid.Row="0" Grid.Column="1"
                 VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
-                Content="Connect" Width="75" Height="18" FontWeight="Light" FontSize="10"
+                Content="Start" Width="75" Height="18" FontWeight="Light" FontSize="10"
+                Click="Star_Clik"
+                Name="StartButton"
                 />
 
         <!--For choosing to either be a host or not-->

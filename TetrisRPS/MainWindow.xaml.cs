@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TetrisRPS
 {
@@ -151,11 +152,14 @@ namespace TetrisRPS
             timer.Start();
         }
 
-        // Draw the the game grid on the canvas
-        // The function is called inside the canvas using the Loaded function
-        private async void GameCanvasLoaded(object sender, RoutedEventArgs e)
+        private async void Star_Clik(object sender, RoutedEventArgs e)
         {
-            await GameLoop();
+            IPInput.IsEnabled = false;
+            StartButton.IsEnabled = false;
+            gameOverScreen.Visibility = Visibility.Hidden;
+            gameState = new GameState();
+            timer.Start();
+            
         }
 
         // Play again button
