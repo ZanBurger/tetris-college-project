@@ -43,7 +43,7 @@
         <Button Grid.Row="0" Grid.Column="1"
                 VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
                 Content="Connect" Width="75" Height="18" FontWeight="Light" FontSize="10"
-                Click=""/>
+                />
 
         <!--For choosing to either be a host or not-->
         <TextBlock Grid.Row="0" Grid.Column="3"
