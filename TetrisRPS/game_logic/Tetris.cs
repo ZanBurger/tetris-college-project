@@ -12,11 +12,11 @@ namespace TetrisRPS
         // public int holding;
         // public int next;
         public int button;
-        public void ButtonPress(int butt) 
+        public void ButtonPress(int butt)
         {
             button = butt;
         }
-        
+
         public void Tick()
         {
 

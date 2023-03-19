@@ -54,7 +54,7 @@ namespace TetrisRPS
         private readonly Image[,] imageControls;
 
         private GameState gameState = new GameState();
-        
+
         DispatcherTimer timer = new DispatcherTimer();
 
         public MainWindow()
@@ -80,13 +80,15 @@ namespace TetrisRPS
             }
         }
 
-        private Image[,] SetupGameCanvas(GameGrid grid) 
+        private Image[,] SetupGameCanvas(GameGrid grid)
         {
             Image[,] ImageControls = new Image[grid.Rows, grid.Columns];
             int cellSize = 25;
 
-            for (int r = 0; r < grid.Rows; r++) {
-                for (int c = 0; c < grid.Columns; c++) {
+            for (int r = 0; r < grid.Rows; r++)
+            {
+                for (int c = 0; c < grid.Columns; c++)
+                {
                     Image imageControl = new Image
                     {
                         Width = cellSize,
@@ -99,51 +101,60 @@ namespace TetrisRPS
                 }
             }
             return ImageControls;
-    }
+        }
 
-        private void DrawGrid(GameGrid grid) {
-            for (int r = 0; r < grid.Rows; r++) {
-                for (int c = 0; c < grid.Columns; c++) { 
+        private void DrawGrid(GameGrid grid)
+        {
+            for (int r = 0; r < grid.Rows; r++)
+            {
+                for (int c = 0; c < grid.Columns; c++)
+                {
                     int id = grid[r, c];
                     imageControls[r, c].Source = tileImages[id];
                 }
             }
         }
 
-        private void DrawBlock(Block block) {
-            foreach (Position p in block.TilePositions()) {
+        private void DrawBlock(Block block)
+        {
+            foreach (Position p in block.TilePositions())
+            {
                 imageControls[p.Row, p.Column].Source = tileImages[block.Id];
             }
         }
 
-        private void DrawHeldBlock(Block heldBlock) {
+        private void DrawHeldBlock(Block heldBlock)
+        {
             if (heldBlock == null)
             {
                 holdImage.Source = blockImages[0];
             }
-            else {
+            else
+            {
                 holdImage.Source = blockImages[heldBlock.Id];
             }
         }
 
-        private void Draw(GameState gameState) {
+        private void Draw(GameState gameState)
+        {
             DrawGrid(gameState.GameGrid);
             DrawBlock(gameState.currentBlock);
             DrawHeldBlock(gameState.HeldBlock);
         }
 
         // Gameloop that draws the game state.
-     
+
         // Detecting player input
         // Function is called inside the Window
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (gameState.IsGameOver) {
+            if (gameState.IsGameOver)
+            {
                 return;
             }
             gameState.MoveBlock((int)e.Key);
             Draw(gameState);
-            }
+        }
 
         private async void End_Click(object sender, RoutedEventArgs e)
         {
@@ -159,13 +170,13 @@ namespace TetrisRPS
             gameOverScreen.Visibility = Visibility.Hidden;
             gameState = new GameState();
             timer.Start();
-            
+
         }
 
         // Play again button
         // The button appears in the overlay once the game is over
         // Honestly not sure how this one is going to work with two players having to press it at the same time
-        
+
 
     }
 }

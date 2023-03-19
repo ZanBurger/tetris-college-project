@@ -16,24 +16,28 @@ public class BlockQueue
         new ZBlock()
     };
     private readonly Random random = new();
-    
-    public Block NextBlock { get; private set;}
+
+    public Block NextBlock { get; private set; }
     int curBlockID = 0;
-    public BlockQueue() {
+    public BlockQueue()
+    {
         NextBlock = RandomBlock();
     }
-    private Block RandomBlock() {
+    private Block RandomBlock()
+    {
         curBlockID++;
         curBlockID %= blocks.Length;
         return blocks[curBlockID].GetType().GetConstructor(Type.EmptyTypes).Invoke(null) as Block;
     }
-    
-    public Block GetAndReplaceNextBlock() {
+
+    public Block GetAndReplaceNextBlock()
+    {
         Block block = NextBlock;
-        do {
+        do
+        {
             NextBlock = RandomBlock();
         } while (block.Id == NextBlock.Id);
         return block;
     }
-    
+
 }
