@@ -194,8 +194,7 @@ namespace TetrisRPS
             StartButton.IsEnabled = true;
             IsSinglePlayer.IsEnabled = true;
 
-            firstGameState = new GameState();
-            secondGameState = new GameState();
+            
 
             Draw(firstGameState, firstImageControls);
             DrawHeldBlock(firstGameState.HeldBlock);
@@ -209,6 +208,10 @@ namespace TetrisRPS
             IPInput.IsEnabled = false;
             StartButton.IsEnabled = false;
             IsSinglePlayer.IsEnabled = false;
+            this.Focus();
+
+            firstGameState = new GameState();
+            secondGameState = new GameState();
 
             if (IsSinglePlayer.IsChecked is bool a) 
             {

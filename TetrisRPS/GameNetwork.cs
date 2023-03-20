@@ -69,11 +69,11 @@ namespace TetrisRPS
 
         public void SendData(int key)
         {
-            if (networkStream == null) return;
-
-            byte[] bytes = BitConverter.GetBytes(key);
-            networkStream?.Write(bytes, 0, bytes.Length);
-        }
-        
+            try
+            {
+                byte[] bytes = BitConverter.GetBytes(key);
+                networkStream?.Write(bytes, 0, bytes.Length);
+            }catch(Exception e) { }
+        }  
     }
 }
