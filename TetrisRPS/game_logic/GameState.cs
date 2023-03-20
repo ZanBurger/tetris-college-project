@@ -66,7 +66,7 @@ public class GameState
         return false;
     }
     // If the block is out of bounds, it will rotate it back.
-    public void RotateBlockCW()
+    private void RotateBlockCW()
     {
         CurrentBlock.RotateCW();
         if (IsBlockOutOfBounds())
@@ -74,7 +74,7 @@ public class GameState
             CurrentBlock.RotateCCW();
         }
     }
-    public void RotateBlockCCW()
+    private void RotateBlockCCW()
     {
         CurrentBlock.RotateCCW();
         if (IsBlockOutOfBounds())
@@ -83,7 +83,7 @@ public class GameState
         }
     }
     // If the block is out of bounds, it will move it back.
-    public void MoveBlockLeft()
+    private void MoveBlockLeft()
     {
         CurrentBlock.Move(0, -1);
         if (IsBlockOutOfBounds())
@@ -91,7 +91,7 @@ public class GameState
             CurrentBlock.Move(0, 1);
         }
     }
-    public void MoveBlockRight()
+    private void MoveBlockRight()
     {
         CurrentBlock.Move(0, 1);
         if (IsBlockOutOfBounds())
@@ -142,7 +142,7 @@ public class GameState
         return drop;
     }
 
-    public int BlockDropDistance()
+    private int BlockDropDistance()
     {
         int drop = GameGrid.Rows;
         foreach (Position p in CurrentBlock.TilePositions())
@@ -151,7 +151,7 @@ public class GameState
         }
         return drop;
     }
-    public void DropBlock()
+    private void DropBlock()
     {
         CurrentBlock.Move(BlockDropDistance(), 0);
         PlaceBlock();
@@ -186,5 +186,4 @@ public class GameState
                 return;
         }
     }
-
 }
