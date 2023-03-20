@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,6 +60,9 @@ namespace TetrisRPS
 
         DispatcherTimer timer = new DispatcherTimer();
 
+        GameNetwork gameNetwork = new GameNetwork();
+        public const int Tick = 180;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -66,6 +70,15 @@ namespace TetrisRPS
             secondImageControls = SetupGameCanvas(secondGameState.GameGrid, secondCanvas);
             timer.Tick += Game_Tick;
             timer.Interval = TimeSpan.FromMilliseconds(500);
+
+            gameNetwork.OnEventReceived += GameNetwork_OnEventReceived;
+        }
+
+        private void GameNetwork_OnEventReceived(int e)
+        {
+            if(e == Tick) secondGameState.MoveBlockDown();
+            secondGameState.MoveBlock(e);
+            if (!secondGameState.IsGameOver) gameNetwork.BeginRead();
         }
 
         private void Game_Tick(object? sender, EventArgs e)
@@ -74,13 +87,31 @@ namespace TetrisRPS
             {
                 firstGameState.MoveBlockDown();
                 Draw(firstGameState, firstImageControls);
+                DrawHeldBlock(firstGameState.HeldBlock);
+                gameNetwork.SendData(Tick);
             }
             else
             {
                 gameOverScreen.Visibility = Visibility.Visible;
-                playerWinText.Text = "Game Over";
+                if (firstGameState.IsGameOver)
+                    playerWinText.Text = "You Lose";
+                else
+                    playerWinText.Text = "You Win";
+
+
+                if (!isSingle)
+                {
+                    if (isHost)
+                        gameNetwork.StopListener();
+                    else
+                        gameNetwork.StopClient();
+                }
+
+
+
                 timer.Stop();
             }
+            Draw(secondGameState, secondImageControls);
         }
 
         private Image[,] SetupGameCanvas(GameGrid grid, Canvas canvas)
@@ -142,42 +173,63 @@ namespace TetrisRPS
         {
             DrawGrid(gameState.GameGrid, control);
             DrawBlock(gameState.currentBlock, control);
-            DrawHeldBlock(gameState.HeldBlock);
         }
 
         // Detecting player input
-        // Function is called inside the Window
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (firstGameState.IsGameOver)
-            {
+            if (firstGameState.IsGameOver || secondGameState.IsGameOver)
                 return;
-            }
             firstGameState.MoveBlock((int)e.Key);
+            gameNetwork.SendData((int)e.Key);
             Draw(firstGameState, firstImageControls);
+            DrawHeldBlock(firstGameState.HeldBlock);
+            Draw(secondGameState, secondImageControls);
         }
 
-        private async void End_Click(object sender, RoutedEventArgs e)
+        private void End_Click(object sender, RoutedEventArgs e)
         {
             gameOverScreen.Visibility = Visibility.Hidden;
+            IPInput.IsEnabled = true;
+            StartButton.IsEnabled = true;
+            IsSinglePlayer.IsEnabled = true;
+
             firstGameState = new GameState();
-            timer.Start();
+            secondGameState = new GameState();
+
+            Draw(firstGameState, firstImageControls);
+            DrawHeldBlock(firstGameState.HeldBlock);
+            Draw(secondGameState, secondImageControls);
         }
 
-        private async void Star_Clik(object sender, RoutedEventArgs e)
+        private bool isSingle = true;
+        private bool isHost = false;
+        private void Star_Click(object sender, RoutedEventArgs e)
         {
             IPInput.IsEnabled = false;
             StartButton.IsEnabled = false;
-            gameOverScreen.Visibility = Visibility.Hidden;
-            firstGameState = new GameState();
+            IsSinglePlayer.IsEnabled = false;
+
+            if (IsSinglePlayer.IsChecked is bool a) 
+            {
+                isSingle = a;
+                if (!a) 
+                {
+                    if (IPInput.Text == "")
+                    {
+                        gameNetwork.StartListener();
+                        isHost = true;
+                    }
+                    else
+                    {
+                        gameNetwork.StartClient(IPInput.Text);
+                        isHost = false;
+                    }
+                    gameNetwork.BeginRead();
+                }
+            }
+            
             timer.Start();
-
         }
-
-        // Play again button
-        // The button appears in the overlay once the game is over
-        // Honestly not sure how this one is going to work with two players having to press it at the same time
-
-
     }
 }

@@ -8,50 +8,71 @@ using System.Net.Sockets;
 
 namespace TetrisRPS
 {
-    static class GameNetwork
+    class GameNetwork
     {
-        static TcpListener tcpListener;
-        static TcpClient tcpClient;
-        static NetworkStream networkStream;
+        TcpListener? tcpListener;
+        TcpClient? tcpClient;
+        NetworkStream? networkStream;
 
-        public static async void StartListener()
+        public GameNetwork() { }
+
+        public void StartListener()
         {
             tcpListener = new TcpListener(IPAddress.Any, 8000);
             tcpListener.Start();
-            tcpClient = await tcpListener.AcceptTcpClientAsync();
+            tcpClient = tcpListener.AcceptTcpClient();
             networkStream = tcpClient.GetStream();
         }
 
-        public static void StopListener()
+        public void StopListener()
         {
-            networkStream.Close();
-            tcpClient.Close();
-            tcpListener.Stop();
+            networkStream?.Close();
+            tcpClient?.Close();
+            tcpListener?.Stop();
         }
 
-        public static void StartClient(string ip)
+        public void StartClient(string ip)
         {
             tcpClient = new TcpClient(ip, 8000);
             networkStream = tcpClient.GetStream();
         }
 
-        public static void StopClient(string ip)
+        public void StopClient()
         {
-            networkStream.Close();
-            tcpClient.Close();
+            networkStream?.Close();
+            tcpClient?.Close();  
         }
 
-        public static async void GetData()
+        public delegate void EventReceived(int e);
+        public event EventReceived? OnEventReceived;
+        byte[] data = new byte[4];
+
+        public void BeginRead()
         {
-            byte[] data = new byte[1024];
-            int count = await networkStream.ReadAsync(data, 0, data.Length);
-
-
+            if (networkStream == null) return;
+            networkStream?.BeginRead(data, 0, data.Length, OnReadComplete, null);
         }
 
-        public static void SendData()
+        private void OnReadComplete (IAsyncResult ar)
         {
+            try
+            {
+                int bytesRead = networkStream.EndRead(ar);
+                if (bytesRead > 0)
+                {
+                    int ret = BitConverter.ToInt32(data);
+                    OnEventReceived?.Invoke(ret);
+                }
+            }
+            catch (Exception ex) { }
+        }
 
+        public void SendData(int key)
+        {
+            if (networkStream == null) return;
+
+            byte[] bytes = BitConverter.GetBytes(key);
+            networkStream?.Write(bytes, 0, bytes.Length);
         }
         
     }
