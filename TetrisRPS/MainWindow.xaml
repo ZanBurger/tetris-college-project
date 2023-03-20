@@ -75,31 +75,14 @@
                 Background="#545454"/>
         </Viewbox>
 
-        <TextBlock x:Name="ScoreText"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   Text="Score: 0"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"/>
-
         <!--The block that is currently being held-->
-        <StackPanel Grid.Row="2"
-                    Grid.Column="0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
-            <TextBlock Text="Hold" TextAlignment="Center"/>
-
-            <Image x:Name="holdImage" Margin="20" Width="120"/>
-        </StackPanel>
-
-        <!--The upcoming block-->
         <StackPanel Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right">
-            <TextBlock Text="Upcoming" TextAlignment="Center" Margin="0,15,0,0"/>
+            <TextBlock Text="Hold" TextAlignment="Center"/>
 
-            <Image x:Name="nextImage" Margin="20" Width="120"/>
+            <Image x:Name="holdImage" Margin="20" Width="120"/>
         </StackPanel>
 
         <!--The game view of the opposing player-->
@@ -143,9 +126,6 @@
                 
                 <!--This is the winning players textBlock change it based on the winner-->
                 <TextBlock x:Name="playerWinText" FontSize="48" TextAlignment="Center"/>
-                
-                <!--This is the score display change it based on the winning players score-->
-                <TextBlock x:Name="playerFinalScore" Text="Score: " FontSize="38" TextAlignment="Center"/>
 
                 <!--Play again button-->
                 <!--You can add the Click event/argument to reset the game-->
